@@ -1,0 +1,61 @@
+{
+  "GlobalConfiguration": {
+    "ServiceDiscoveryProvider": {
+      "Host": "localhost",
+      "Port": 8500,
+      "ConfigurationKey": "A_Gateway"
+    }
+  },
+  "Routes": [
+    { //Ocelot
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5000
+        }
+      ],
+      "UpstreamPathTemplate": "/ocelot/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "SwaggerKey": "ocelot"
+    },
+    {
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8989
+        }
+      ],
+      "DownstreamPathTemplate": "/api/values",
+      "DownstreamScheme": "http",
+      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/values"
+    },
+    {
+      "DownstreamPathTemplate": "/api/values/demo1",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8989
+        }
+      ],
+      "UpstreamPathTemplate": "/values/demo1",
+      "UpstreamHttpMethod": [ "GET" ]
+    }
+  ],
+  "SwaggerEndPoints": [
+    { //Ocelot
+      "Key": "ocelot",
+      "Config": [
+        {
+          "Name": "Ocelot Manager",
+          "Version": "v1",
+          "Url": "http://localhost:5000/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
+}
+
