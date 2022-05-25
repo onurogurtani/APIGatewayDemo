@@ -30,7 +30,8 @@
       "DownstreamPathTemplate": "/api/values",
       "DownstreamScheme": "http",
       "UpstreamHttpMethod": [ "GET" ],
-      "UpstreamPathTemplate": "/values"
+      "UpstreamPathTemplate": "/values",
+      "SwaggerKey": "sampleapi"
     },
     {
       "DownstreamPathTemplate": "/api/values/demo1",
@@ -42,7 +43,21 @@
         }
       ],
       "UpstreamPathTemplate": "/values/demo1",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "SwaggerKey": "sampleapi"
+    },
+    {
+      "DownstreamPathTemplate": "/WeatherForecast",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5225
+        }
+      ],
+      "UpstreamPathTemplate": "/WeatherForecast",
+      "UpstreamHttpMethod": [ "GET" ],
+      "SwaggerKey": "sampleapi2"
     }
   ],
   "SwaggerEndPoints": [
@@ -55,7 +70,26 @@
           "Url": "http://localhost:5000/swagger/v1/swagger.json"
         }
       ]
+    },
+    { //Storage
+      "Key": "sampleapi",
+      "Config": [
+        {
+          "Name": "Sample Api",
+          "Version": "v1",
+          "Url": "http://localhost:8989/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    { //Storage
+      "Key": "sampleapi2",
+      "Config": [
+        {
+          "Name": "Sample Api 2",
+          "Version": "v1",
+          "Url": "http://localhost:5225/swagger/v1/swagger.json"
+        }
+      ]
     }
   ]
 }
-

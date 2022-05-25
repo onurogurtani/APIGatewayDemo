@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Hermes.ApiGateway</name>
+    </assembly>
+    <members>
+        <member name="T:APIGatewayConfigurationWithConsulDemo.Controllers.ManageController">
+            <summary>
+            Ocelot Manager
+            </summary>
+        </member>
+    </members>
+</doc>

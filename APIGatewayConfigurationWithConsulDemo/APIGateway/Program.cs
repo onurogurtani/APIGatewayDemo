@@ -6,7 +6,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    //c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "GW", Version = "v1" });
+    //var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+    //var xmlPath = Path.Combine(basePath, "APIGatewayConfigurationWithConsulDemo.xml");
+    //c.IncludeXmlComments(xmlPath);
+});
+
+
 builder.Services.AddOcelot().AddConsul().AddConfigStoredInConsul();
 
 var env = builder.Environment.EnvironmentName;
