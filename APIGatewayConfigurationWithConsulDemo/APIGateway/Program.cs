@@ -1,4 +1,8 @@
-﻿using Ocelot.DependencyInjection;
+﻿using IdentityModel;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Provider.Consul;
 
@@ -13,9 +17,27 @@ builder.Services.AddSwaggerGen(c =>
     //var xmlPath = Path.Combine(basePath, "APIGatewayConfigurationWithConsulDemo.xml");
     //c.IncludeXmlComments(xmlPath);
 });
+AdminApiConfiguration? adminApiConfiguration = builder.Configuration.GetSection("AdminApiConfiguration").Get<AdminApiConfiguration>();
 
+IdentityModelEventSource.ShowPII = true;
+builder.Services.AddAuthentication("ApiSecurity")
+    .AddJwtBearer("ApiSecurity", options =>
+    {
+        options.Authority = adminApiConfiguration.IdentityServerBaseUrl;
+        options.RequireHttpsMetadata = adminApiConfiguration.RequireHttpsMetadata;
+        options.Audience = adminApiConfiguration.OidcApiName;
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            NameClaimType = JwtClaimTypes.Name,
+            RoleClaimType = JwtClaimTypes.Role, //var isAdmin = User.IsInRole("admin"); kontrol edilir.
+            ValidateAudience = false,
+            ValidateIssuer = false,
+        };
+    });
 
-builder.Services.AddOcelot().AddConsul().AddConfigStoredInConsul();
+builder.Services.AddOcelot(builder.Configuration).AddConsul().AddConfigStoredInConsul();
+
+builder.Services.DecorateClaimAuthoriser();
 
 var env = builder.Environment.EnvironmentName;
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath);
@@ -31,7 +53,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
