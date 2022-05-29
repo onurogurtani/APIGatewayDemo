@@ -2,27 +2,26 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<Nullable>enable</Nullable>
+	
 		<ImplicitUsings>enable</ImplicitUsings>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="IdentityModel" Version="6.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.App" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
 		<PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
 		<PackageReference Include="Ocelot" Version="18.0.0" />
 		<PackageReference Include="Ocelot.Provider.Consul" Version="18.0.0" />
-		<PackageReference Include="MMLib.SwaggerForOcelot" Version="4.8.0" />
+		<PackageReference Include="MMLib.SwaggerForOcelot" Version="5.2.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.2.3" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.2" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.2.3" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.2.3" />
-		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.2.3" />
-		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.2.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.3.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.3.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.3.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.3.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.3.1" />
 	</ItemGroup>
 
 	<ItemGroup>

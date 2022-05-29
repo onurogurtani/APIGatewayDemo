@@ -1,10 +1,16 @@
 ﻿using IdentityModel;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Ocelot.Authorization;
+using Ocelot.Configuration;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Provider.Consul;
+using System.Net;
+using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,10 +23,15 @@ builder.Services.AddSwaggerGen(c =>
     //var xmlPath = Path.Combine(basePath, "APIGatewayConfigurationWithConsulDemo.xml");
     //c.IncludeXmlComments(xmlPath);
 });
-AdminApiConfiguration? adminApiConfiguration = builder.Configuration.GetSection("AdminApiConfiguration").Get<AdminApiConfiguration>();
+
+AdminApiConfiguration adminApiConfiguration = builder.Configuration.GetSection("AdminApiConfiguration").Get<AdminApiConfiguration>();
 
 IdentityModelEventSource.ShowPII = true;
-builder.Services.AddAuthentication("ApiSecurity")
+builder.Services.AddAuthentication(a =>
+{
+    a.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    a.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
     .AddJwtBearer("ApiSecurity", options =>
     {
         options.Authority = adminApiConfiguration.IdentityServerBaseUrl;
@@ -30,14 +41,16 @@ builder.Services.AddAuthentication("ApiSecurity")
         {
             NameClaimType = JwtClaimTypes.Name,
             RoleClaimType = JwtClaimTypes.Role, //var isAdmin = User.IsInRole("admin"); kontrol edilir.
-            ValidateAudience = false,
             ValidateIssuer = false,
+            ValidateAudience = false
         };
     });
 
+builder.Services.AddAuthorization();
+
 builder.Services.AddOcelot(builder.Configuration).AddConsul().AddConfigStoredInConsul();
 
-builder.Services.DecorateClaimAuthoriser();
+var a = builder.Services.First(x => x.ServiceType == typeof(IClaimsAuthorizer));
 
 var env = builder.Environment.EnvironmentName;
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath);
@@ -47,7 +60,6 @@ builder.Configuration.AddEnvironmentVariables();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -57,7 +69,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+ 
 app.UseOcelot();
 
 app.Run();
+
+
+
+

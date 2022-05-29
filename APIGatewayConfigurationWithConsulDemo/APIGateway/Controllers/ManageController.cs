@@ -10,7 +10,7 @@ namespace APIGateway.Controllers
     public class ManageController : ControllerBase
     {
         [HttpGet("Test")]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
             return Ok();
         }
