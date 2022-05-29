@@ -1,4 +1,5 @@
-﻿using IdentityModel;
+﻿using APIGateway.Aggregations;
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
@@ -11,6 +12,8 @@ using Ocelot.Provider.Consul;
 using System.Net;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using Ocelot.Cache.CacheManager;
+using CacheManager.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +51,23 @@ builder.Services.AddAuthentication(a =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddOcelot(builder.Configuration).AddConsul().AddConfigStoredInConsul();
+builder.Services
+    .AddOcelot(builder.Configuration)
+    .AddCacheManager(x =>
+    {
+        x.WithRedisConfiguration("redis",
+                config =>
+                {
+                    config.WithAllowAdmin()
+                    .WithDatabase(0)
+                    .WithEndpoint("localhost", 6379);
+                })
+        .WithJsonSerializer()
+        .WithRedisCacheHandle("redis");
+    })
+    .AddSingletonDefinedAggregator<CustomAggregator>()
+    .AddConsul()
+    .AddConfigStoredInConsul();
 
 var a = builder.Services.First(x => x.ServiceType == typeof(IClaimsAuthorizer));
 

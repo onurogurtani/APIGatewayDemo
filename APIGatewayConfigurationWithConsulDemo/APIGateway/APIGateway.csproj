@@ -8,10 +8,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CacheManager.Serialization.Json" Version="1.2.0" />
+		<PackageReference Include="CacheManager.StackExchange.Redis" Version="1.2.0" />
 		<PackageReference Include="IdentityModel" Version="6.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
 		<PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
 		<PackageReference Include="Ocelot" Version="18.0.0" />
+		<PackageReference Include="Ocelot.Cache.CacheManager" Version="18.0.0" />
 		<PackageReference Include="Ocelot.Provider.Consul" Version="18.0.0" />
 		<PackageReference Include="MMLib.SwaggerForOcelot" Version="5.2.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
@@ -34,10 +37,6 @@
 	  <None Update="APIGateway.xml">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Module\" />
 	</ItemGroup>
 
 </Project>

@@ -34,10 +34,10 @@
       "SwaggerKey": "sampleapi",
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ApiSecurity",
-        "AllowedScopes": [],
-        "RouteClaimsRequirement": {
-          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin"
-        }
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "admin"
       }
     },
     {
