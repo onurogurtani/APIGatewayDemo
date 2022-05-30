@@ -47,6 +47,45 @@
           "Port": 5225
         }
       ],
+      "UpstreamPathTemplate": "/api/basket/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "basket"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "basketapi-test.k8s.kariyer.net",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/order/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "order"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "orderapi-test.k8s.kariyer.net",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/user/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "user"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userapi-test.k8s.kariyer.net",
+          "Port": 80
+        }
+      ],
       "UpstreamPathTemplate": "/api/sample2/{everything}",
       "UpstreamHttpMethod": [ "Get" ],
       "SwaggerKey": "sample2"
@@ -148,6 +187,18 @@
     {
       "RouteKeys": [ "order", "user" ],
       "UpstreamPathTemplate": "/order-with-user/{userid}"
+    },
+    {
+      "RouteKeys": [ "user", "basket" ],
+      "UpstreamPathTemplate": "/user-with-basket/{userid}",
+      "Description": "Custom description for this aggregate route.",
+      "Aggregator": "UserBasketAggregator"
+    },
+    {
+      "RouteKeys": [ "user", "basket","order" ],
+      "UpstreamPathTemplate": "/user-basket-order/{userid}",
+      "Description": "Custom description for this aggregate route.",
+      "Aggregator": "UserBasketOrderAggregator"
     }
   ],
   "SwaggerEndPoints": [
@@ -178,6 +229,36 @@
           "Name": "Sample Api 2",
           "Version": "v1",
           "Url": "http://localhost:5225/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "basket",
+      "Config": [
+        {
+          "Name": "Basket Api ",
+          "Version": "v1",
+          "Url": "http://basketapi-test.k8s.kariyer.net/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "order",
+      "Config": [
+        {
+          "Name": "Order Api ",
+          "Version": "v1",
+          "Url": "http://orderapi-test.k8s.kariyer.net/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "user",
+      "Config": [
+        {
+          "Name": "User Api ",
+          "Version": "v1",
+          "Url": "http://userapi-test.k8s.kariyer.net/swagger/v1/swagger.json"
         }
       ]
     }

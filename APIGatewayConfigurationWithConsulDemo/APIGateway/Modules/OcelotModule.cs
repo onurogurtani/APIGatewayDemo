@@ -34,7 +34,8 @@ namespace APIGateway.Modules
                 .WithJsonSerializer()
                 .WithRedisCacheHandle("redis");
             })
-                .AddSingletonDefinedAggregator<CustomAggregator>()
+                .AddSingletonDefinedAggregator<UserBasketAggregator>()
+                .AddSingletonDefinedAggregator<UserBasketOrderAggregator>()
                 .AddConsul()
                 .AddConfigStoredInConsul();
 

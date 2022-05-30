@@ -71,7 +71,12 @@ public static class SwaggerModule
         services.AddSwaggerGenNewtonsoftSupport();
         services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
 
-        services.AddSwaggerForOcelot(configuration);
+        services.AddSwaggerForOcelot(configuration, (o) =>
+        {
+            //o.GenerateDocsForAggregates = true;
+            //o.GenerateDocsForGatewayItSelf = true;
+            //https://blog.burgyn.online/2021/02/04/swagger-documentation-of-ocelot-aggregates
+        });
         return services;
     }
     public static IApplicationBuilder UseSwaggers(this IApplicationBuilder app, IConfiguration configuration)
