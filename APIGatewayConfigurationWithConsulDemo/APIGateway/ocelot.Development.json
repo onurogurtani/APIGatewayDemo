@@ -86,6 +86,48 @@
       "UpstreamHttpMethod": [
         "GET"
       ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/baskets/{userid}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "basketapi-test.k8s.kariyer.net",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/baskets/{userid}",
+      "UpstreamHttpMethod": [
+        "GET"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/orders/{userid}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "orderapi-test.k8s.kariyer.net",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/orders/{userid}",
+      "UpstreamHttpMethod": [
+        "GET"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/users/{userid}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "userapi-test.k8s.kariyer.net",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/users/{userid}",
+      "UpstreamHttpMethod": [
+        "GET"
+      ]
     }
   ],
   "SwaggerEndPoints": [
