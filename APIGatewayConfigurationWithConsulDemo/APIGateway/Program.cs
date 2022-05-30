@@ -1,5 +1,4 @@
-﻿using Ocelot.Middleware;
-using Newtonsoft.Json.Converters;
+﻿using Newtonsoft.Json.Converters;
 using APIGateway.Modules;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,6 +37,11 @@ app.UseSwaggers(builder.Configuration);
 app.MapControllers();
 
 app.UseOcelots(builder.Configuration);
+
+if (builder.Environment.IsProduction() != false)
+{
+    app.UseDeveloperExceptionPage();
+}
 
 app.Run();
 

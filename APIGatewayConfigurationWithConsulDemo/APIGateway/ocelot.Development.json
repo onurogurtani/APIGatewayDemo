@@ -63,6 +63,13 @@
       "UpstreamHttpMethod": [
         "GET"
       ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 1
+      },
       "UpstreamPathTemplate": "/values",
       "SwaggerKey": "sampleapi",
       "AuthenticationOptions": {
@@ -99,7 +106,8 @@
       "UpstreamPathTemplate": "/baskets/{userid}",
       "UpstreamHttpMethod": [
         "GET"
-      ]
+      ],
+      "Key": "basket"
     },
     {
       "DownstreamPathTemplate": "/api/orders/{userid}",
@@ -113,7 +121,8 @@
       "UpstreamPathTemplate": "/orders/{userid}",
       "UpstreamHttpMethod": [
         "GET"
-      ]
+      ],
+      "Key": "order"
     },
     {
       "DownstreamPathTemplate": "/api/users/{userid}",
@@ -127,7 +136,14 @@
       "UpstreamPathTemplate": "/users/{userid}",
       "UpstreamHttpMethod": [
         "GET"
-      ]
+      ],
+      "Key": "user"
+    }
+  ],
+  "Aggregates": [
+    {
+      "RouteKeys": [ "order", "user" ],
+      "UpstreamPathTemplate": "/order-with-user/{userid}"
     }
   ],
   "SwaggerEndPoints": [

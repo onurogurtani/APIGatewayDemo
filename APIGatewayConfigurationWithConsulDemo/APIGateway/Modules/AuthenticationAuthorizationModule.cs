@@ -15,7 +15,11 @@ namespace APIGateway.Modules
         {
             AdminApiConfiguration adminApiConfiguration = configuration.GetSection("AdminApiConfiguration").Get<AdminApiConfiguration>();
 
-            IdentityModelEventSource.ShowPII = true;
+            if (environment.IsProduction() != false)
+            {
+                IdentityModelEventSource.ShowPII = true;
+            }
+
 
             Action<JwtBearerOptions> options = o =>
             {
