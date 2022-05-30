@@ -47,9 +47,9 @@
           "Port": 5225
         }
       ],
-      "UpstreamPathTemplate": "/api/basket/{everything}",
+      "UpstreamPathTemplate": "/api/sample2/{everything}",
       "UpstreamHttpMethod": [ "Get" ],
-      "SwaggerKey": "basket"
+      "SwaggerKey": "sample2"
     },
     {
       "DownstreamPathTemplate": "/api/{everything}",
@@ -60,16 +60,16 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/api/order/{everything}",
+      "UpstreamPathTemplate": "/api/basket/{everything}",
       "UpstreamHttpMethod": [ "Get" ],
-      "SwaggerKey": "order"
+      "SwaggerKey": "basket"
     },
     {
       "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "orderapi-test.k8s.kariyer.net",
+          "Host": "userapi-test.k8s.kariyer.net",
           "Port": 80
         }
       ],
@@ -82,13 +82,13 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "userapi-test.k8s.kariyer.net",
+          "Host": "orderapi-test.k8s.kariyer.net",
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/api/sample2/{everything}",
+      "UpstreamPathTemplate": "/api/order/{everything}",
       "UpstreamHttpMethod": [ "Get" ],
-      "SwaggerKey": "sample2"
+      "SwaggerKey": "order"
     },
     {
       "DownstreamPathTemplate": "/api/values",
@@ -195,7 +195,7 @@
       "Aggregator": "UserBasketAggregator"
     },
     {
-      "RouteKeys": [ "user", "basket","order" ],
+      "RouteKeys": [ "user", "basket", "order" ],
       "UpstreamPathTemplate": "/user-basket-order/{userid}",
       "Description": "Custom description for this aggregate route.",
       "Aggregator": "UserBasketOrderAggregator"
