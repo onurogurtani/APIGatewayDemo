@@ -14,45 +14,47 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using Ocelot.Cache.CacheManager;
 using CacheManager.Core;
+using Ocelot.Administration;
+using MMLib.Ocelot.Provider.AppConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    //c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "GW", Version = "v1" });
-    //var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-    //var xmlPath = Path.Combine(basePath, "APIGatewayConfigurationWithConsulDemo.xml");
-    //c.IncludeXmlComments(xmlPath);
-});
+//builder.Services.AddEndpointsApiExplorer();
+
 
 AdminApiConfiguration adminApiConfiguration = builder.Configuration.GetSection("AdminApiConfiguration").Get<AdminApiConfiguration>();
 
 IdentityModelEventSource.ShowPII = true;
+
+Action<JwtBearerOptions> options = o =>
+{
+    o.Authority = adminApiConfiguration.IdentityServerBaseUrl;
+    o.RequireHttpsMetadata = adminApiConfiguration.RequireHttpsMetadata;
+    o.Audience = adminApiConfiguration.OidcApiName;
+    o.TokenValidationParameters = new TokenValidationParameters()
+    {
+        NameClaimType = JwtClaimTypes.Name,
+        RoleClaimType = JwtClaimTypes.Role, //var isAdmin = User.IsInRole("admin"); kontrol edilir.
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+
+};
+
 builder.Services.AddAuthentication(a =>
 {
     a.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     a.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddJwtBearer("ApiSecurity", options =>
-    {
-        options.Authority = adminApiConfiguration.IdentityServerBaseUrl;
-        options.RequireHttpsMetadata = adminApiConfiguration.RequireHttpsMetadata;
-        options.Audience = adminApiConfiguration.OidcApiName;
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            NameClaimType = JwtClaimTypes.Name,
-            RoleClaimType = JwtClaimTypes.Role, //var isAdmin = User.IsInRole("admin"); kontrol edilir.
-            ValidateIssuer = false,
-            ValidateAudience = false
-        };
-    });
+    .AddJwtBearer("ApiSecurity", options);
 
 builder.Services.AddAuthorization();
 
 builder.Services
     .AddOcelot(builder.Configuration)
+    .AddAppConfiguration()
+    //.AddAdministration("/administration", options)
     .AddCacheManager(x =>
     {
         x.WithRedisConfiguration("redis",
@@ -69,7 +71,9 @@ builder.Services
     .AddConsul()
     .AddConfigStoredInConsul();
 
-var a = builder.Services.First(x => x.ServiceType == typeof(IClaimsAuthorizer));
+
+
+
 
 var env = builder.Environment.EnvironmentName;
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath);
@@ -77,6 +81,7 @@ builder.Configuration.AddJsonFile($"appsettings.{env}.json", true, true);
 builder.Configuration.AddJsonFile($"ocelot.{env}.json", true, true);
 builder.Configuration.AddEnvironmentVariables();
 
+builder.Services.AddSwaggerForOcelot(builder.Configuration);
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -88,8 +93,15 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
- 
+
+app.UseSwaggerForOcelotUI(opt =>
+{
+    opt.PathToSwaggerGenerator = "/swagger/docs";
+});
+
 app.UseOcelot();
+
+
 
 app.Run();
 

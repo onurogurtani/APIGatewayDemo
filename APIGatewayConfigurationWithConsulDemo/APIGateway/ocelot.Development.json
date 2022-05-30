@@ -17,19 +17,52 @@
         }
       ],
       "UpstreamPathTemplate": "/ocelot/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
       "SwaggerKey": "ocelot"
     },
     {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
           "Port": 8989
         }
       ],
+      "UpstreamPathTemplate": "/api/sample1/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "sample1"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5225
+        }
+      ],
+      "UpstreamPathTemplate": "/api/sample2/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "sample2"
+    },
+    {
       "DownstreamPathTemplate": "/api/values",
       "DownstreamScheme": "http",
-      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8989
+        }
+      ],
+      "UpstreamHttpMethod": [
+        "GET"
+      ],
       "UpstreamPathTemplate": "/values",
       "SwaggerKey": "sampleapi",
       "AuthenticationOptions": {
@@ -50,21 +83,9 @@
         }
       ],
       "UpstreamPathTemplate": "/values/demo1",
-      "UpstreamHttpMethod": [ "GET" ],
-      "SwaggerKey": "sampleapi"
-    },
-    {
-      "DownstreamPathTemplate": "/WeatherForecast",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5225
-        }
-      ],
-      "UpstreamPathTemplate": "/WeatherForecast",
-      "UpstreamHttpMethod": [ "GET" ],
-      "SwaggerKey": "sampleapi2"
+      "UpstreamHttpMethod": [
+        "GET"
+      ]
     }
   ],
   "SwaggerEndPoints": [
@@ -79,7 +100,7 @@
       ]
     },
     {
-      "Key": "sampleapi",
+      "Key": "sample1",
       "Config": [
         {
           "Name": "Sample Api",
@@ -89,7 +110,7 @@
       ]
     },
     {
-      "Key": "sampleapi2",
+      "Key": "sample2",
       "Config": [
         {
           "Name": "Sample Api 2",
