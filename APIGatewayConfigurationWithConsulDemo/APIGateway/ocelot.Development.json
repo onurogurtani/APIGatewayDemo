@@ -71,6 +71,10 @@
         "Limit": 1
       },
       "UpstreamPathTemplate": "/values",
+      "FileCacheOptions": {
+        "TtlSeconds": 60,
+        "Region": "hermes"
+      },
       "SwaggerKey": "sampleapi",
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "ApiSecurity",
