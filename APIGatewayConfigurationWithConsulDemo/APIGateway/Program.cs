@@ -1,27 +1,33 @@
 ﻿using APIGateway.Aggregations;
 using IdentityModel;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Ocelot.Authorization;
-using Ocelot.Configuration;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Provider.Consul;
-using System.Net;
-using System.Security.Claims;
-using System.Text.RegularExpressions;
 using Ocelot.Cache.CacheManager;
 using CacheManager.Core;
-using Ocelot.Administration;
 using MMLib.Ocelot.Provider.AppConfiguration;
+using Newtonsoft.Json.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-//builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(p => p.SerializerSettings.Converters.Add(new StringEnumConverter()));
+builder.Services.AddMvcCore()
+        .AddNewtonsoftJson(p => p.SerializerSettings.Converters.Add(new StringEnumConverter()))
+        .AddApiExplorer();
+builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.Configure<RouteOptions>(options =>
+{
+    options.LowercaseUrls = true;
+    options.LowercaseQueryStrings = true;
+});
+
+builder.Services.AddSwaggers(builder.Environment, builder.Configuration);
+                 
 
 AdminApiConfiguration adminApiConfiguration = builder.Configuration.GetSection("AdminApiConfiguration").Get<AdminApiConfiguration>();
 
@@ -46,8 +52,7 @@ builder.Services.AddAuthentication(a =>
 {
     a.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     a.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-    .AddJwtBearer("ApiSecurity", options);
+}).AddJwtBearer("ApiSecurity", options);
 
 builder.Services.AddAuthorization();
 
@@ -71,37 +76,28 @@ builder.Services
     .AddConsul()
     .AddConfigStoredInConsul();
 
-
-
-
-
 var env = builder.Environment.EnvironmentName;
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath);
 builder.Configuration.AddJsonFile($"appsettings.{env}.json", true, true);
 builder.Configuration.AddJsonFile($"ocelot.{env}.json", true, true);
 builder.Configuration.AddEnvironmentVariables();
 
-builder.Services.AddSwaggerForOcelot(builder.Configuration);
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
+
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseSwaggers(builder.Configuration);
+
 app.MapControllers();
 
-app.UseSwaggerForOcelotUI(opt =>
-{
-    opt.PathToSwaggerGenerator = "/swagger/docs";
-});
-
 app.UseOcelot();
-
-
 
 app.Run();
 
